@@ -1,0 +1,8 @@
+# Tous les bibs utulises:
+
+streamlit 
+opencv-python
+numpy
+matplotlib
+
+# runned f venv "virtual environmnt"
