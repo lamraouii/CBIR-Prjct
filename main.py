@@ -11,6 +11,20 @@ import matplotlib.pyplot as plt
 # ============================
 # Utilities: read & preprocess
 # ============================
+def show_histogram(img, title="Histogram RGB"):
+    # katdir affichage dyal histogram RGB
+    # // montre la distribution des couleurs par canal
+    chans = cv2.split(img)
+    colors = ("r", "g", "b")
+    plt.figure()
+    plt.title(title)
+    plt.xlabel("Intensité")
+    plt.ylabel("Fréquence")
+    for (chan, color) in zip(chans, colors):
+        hist = cv2.calcHist([chan], [0], None, [256], [0, 256])
+        plt.plot(hist, color=color)
+        plt.xlim([0, 256])
+    st.pyplot(plt)
 
 def load_and_resize(image_path, size=(256,256)):
     """
@@ -214,6 +228,16 @@ def main():
                 # prepare list of file paths to show (we assume dataset/<filename>)
                 res_paths = [os.path.join(dataset_dir, fname) for (_, fname) in results]
                 show_image_grid(res_paths, cols=3, title="Top results")
+                # afficher histogramme de l'image requête
+                st.write("### Histogramme de l’image requête")
+                show_histogram(img, "Histogramme RGB - Image requête")
+
+                # afficher histogramme du top-1 résultat
+                top1_path = res_paths[0]
+                top1_img = load_and_resize(top1_path)
+                st.write("### Histogramme du Top-1 résultat")
+                show_histogram(top1_img, f"Histogramme RGB - {os.path.basename(top1_path)}")
+
 
 if __name__ == "__main__":
     main()
